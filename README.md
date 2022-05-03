@@ -2,16 +2,16 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/NivaldoFarias/batepapo-uol-api-project">
-    <img src="https://github.com/NivaldoFarias/projeto5-batepapouol/blob/main/dist/img/logo-uol-icon-512.png" alt="Logo" width="140">
+  <a href="https://github.com/NivaldoFarias/mywallet-project-back">
+    <img src="https://github.com/NivaldoFarias/mywallet-project-front/blob/main/src/assets/mywallet-logo.png" alt="Logo" width="130">
   </a>
 
-<h3 align="center">Batepapo Uol API Project</h3>
+<h3 align="center">MyWallet Project (Backend)</h3>
   <h6 align="center">WIP</h6>
   <p align="center">
     Backend Development Project 
     <br />
-    <a href="https://github.com/NivaldoFarias/batepapo-uol-api-project/tree/main/src"><strong>Browse JS code»</strong></a>
+    <a href="https://github.com/NivaldoFarias/mywallet-project-back/tree/main/src"><strong>Browse JS code»</strong></a>
 </div>
 
 <!-- ![Banner](https://github.com/NivaldoFarias/projeto10-trackit/blob/main/src/assets/images/trackit-showroom.png) -->
