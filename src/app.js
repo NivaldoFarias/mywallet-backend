@@ -4,8 +4,8 @@ import cors from "cors";
 import chalk from "chalk";
 import dotenv from "dotenv";
 
-import { postUser } from "./handlers/postUser.js";
-import { getUsers } from "./handlers/getUsers.js";
+import { signup, login } from "./controllers/authController.js";
+import { getUsers } from "./controllers/userController.js";
 
 export let database = null;
 export const DB_INFO = chalk.bold.blue("[Database]");
@@ -16,7 +16,8 @@ dotenv.config();
 const app = express().use(json()).use(cors());
 const URI = process.env.MONGODB_URI;
 const PORT = process.env.PORT || 5000;
-const POST_USER = process.env.POST_USER;
+const SIGNUP = process.env.SIGNUP;
+const LOGIN = process.env.LOGIN;
 const GET_USERS = process.env.GET_USERS;
 const SERVER_INFO = chalk.bold.yellow("[Server]");
 const mongoClient = new MongoClient(URI, {
@@ -35,12 +36,16 @@ mongoClient.connect(() => {
   );
 });
 
-app.get(GET_USERS, getUsers);
+app.post(SIGNUP, signup);
 
-app.post(POST_USER, postUser);
+app.post(LOGIN, login);
+
+app.get(GET_USERS, getUsers);
 
 app.listen(PORT, () => {
   console.log(
-    `${SERVER_INFO} Server started on port ${chalk.bold.yellow(PORT)}`
+    chalk.bold.yellow(
+      `${SERVER_INFO} Server started on port ${chalk.bold.yellow(PORT)}`
+    )
   );
 });
