@@ -6,7 +6,7 @@
     <img src="https://github.com/NivaldoFarias/mywallet-project-front/blob/main/src/assets/mywallet-logo.png" alt="Logo" width="130">
   </a>
 
-<h3 align="center">MyWallet Project (Backend)</h3>
+<h3 align="center">MyWallet Project | Backend</h3>
   <h6 align="center">WIP</h6>
   <p align="center">
     Backend Development Project 
