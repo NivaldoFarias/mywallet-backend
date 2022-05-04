@@ -1,5 +1,6 @@
 import chalk from "chalk";
-import { database, ERROR } from "../app.js";
+import { ERROR } from "./../app.js";
+import { database } from "./../server/mongoClient.js";
 
 export async function getUsers(_req, res) {
   try {

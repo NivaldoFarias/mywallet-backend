@@ -1,10 +1,11 @@
 import bcrypt from "bcrypt";
 import chalk from "chalk";
 import { v4 as uuid } from "uuid";
-
 import { stripHtml } from "string-strip-html";
+
 import { userSchema } from "../models/user.js";
-import { ERROR, database, DB_INFO } from "../app.js";
+import { ERROR, DB_INFO } from "../app.js";
+import { database } from "./../server/mongoClient.js";
 
 export async function signup(req, res) {
   const name = stripHtml(req.body.name).result.trim();
