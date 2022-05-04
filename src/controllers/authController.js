@@ -63,7 +63,7 @@ export async function signup(req, res) {
   }
 }
 
-export async function login(req, res) {
+export async function signin(req, res) {
   const email = stripHtml(req.body.email).result.trim();
   const password = req.body.password;
 
@@ -98,7 +98,11 @@ export async function login(req, res) {
         }
       );
       console.log(chalk.blue(`${DB_INFO} user ${chalk.bold(email)} logged in`));
-      res.send(token);
+      res.send({
+        name: user.name,
+        email: user.email,
+        token: token,
+      });
     } catch (err) {
       console.log(chalk.red(`${ERROR} ${err}`));
       res.status(500).send(err);
