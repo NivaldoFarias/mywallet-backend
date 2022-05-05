@@ -1,7 +1,7 @@
 import chalk from "chalk";
 
 import { db } from "./../server/mongoClient.js";
-import { ERROR } from "./../blueprints/chalk.js";
+import { ERROR } from "../models/blueprint/chalk.js";
 import { tokenSchema } from "./../models/token.js";
 
 export async function getAll(req, res) {

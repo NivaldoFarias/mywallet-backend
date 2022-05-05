@@ -3,7 +3,7 @@ import chalk from "chalk";
 import { v4 as uuid } from "uuid";
 import { stripHtml } from "string-strip-html";
 
-import { ERROR, DB_INFO } from "./../blueprints/chalk.js";
+import { ERROR, DB_INFO } from "../models/blueprint/chalk.js";
 import { userSchema } from "./../models/user.js";
 import { db } from "./../server/mongoClient.js";
 
