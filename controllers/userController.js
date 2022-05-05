@@ -8,6 +8,9 @@ export async function getAll(_req, res) {
     res.send(users);
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
-    res.status(500).send(err);
+    res.status(500).send({
+      message: "Internal error while getting users",
+      detail: err,
+    });
   }
 }

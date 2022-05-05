@@ -22,8 +22,10 @@ export async function signup(req, res) {
       console.log(
         chalk.red(`${ERROR} ${validate.error.details.map((e) => e.message)}`)
       );
-      res.status(422).send(validate.error.details.map((e) => e.message));
-      return;
+      return res.status(422).send({
+        message: "invalid input",
+        details: validate.error.details.map((e) => e.message),
+      });
     }
 
     const userExists = await db
@@ -33,7 +35,10 @@ export async function signup(req, res) {
       console.log(
         chalk.red(`${ERROR} email ${chalk.bold(email)} is already in use`)
       );
-      res.status(409).send(`email ${email} is already in use`);
+      res.status(409).send({
+        message: "email is already in use",
+        detail: `Ensure that ${email} is not already in use`,
+      });
       return;
     }
 
@@ -56,11 +61,17 @@ export async function signup(req, res) {
       res.sendStatus(201);
     } catch (err) {
       console.log(chalk.red(`${ERROR} ${err}`));
-      res.status(500).send(err);
+      res.status(500).send({
+        message: "Internal error creating user",
+        detail: err,
+      });
     }
   } catch (err) {
     console.log(chalk.bold.red(err));
-    res.status(500).send(err);
+    res.status(500).send({
+      message: "Internal error creating user",
+      detail: err,
+    });
   }
 }
 
@@ -74,13 +85,31 @@ export async function signin(req, res) {
       console.log(
         chalk.red(`${ERROR} user ${chalk.bold(email)} does not exist`)
       );
-      return res.status(404).send(`user ${email} does not exist`);
-    }
-    if (!bcrypt.compareSync(password, user.password)) {
+      return res.status(404).send({
+        message: `user does not exist`,
+        detail: `Ensure that ${email} is registered`,
+      });
+    } else if (!bcrypt.compareSync(password, user.password)) {
       console.log(
         chalk.red(`${ERROR} password for user ${chalk.bold(email)} is invalid`)
       );
-      return res.status(403).send(`password for user ${email} is invalid`);
+      return res.status(403).send({
+        message: `password for user ${email} is invalid`,
+        detail: `Ensure that the username and password included in the request are correct`,
+      });
+    }
+
+    const isUserOnline = await db.collection("sessions").findOne({
+      email: email,
+    });
+    if (isUserOnline.active) {
+      console.log(
+        chalk.red(`${ERROR} user ${chalk.bold(email)} is already logged in`)
+      );
+      return res.status(409).send({
+        message: `user is already logged in`,
+        detail: `Ensure that ${email} is not already logged in`,
+      });
     }
 
     try {
@@ -98,10 +127,16 @@ export async function signin(req, res) {
       });
     } catch (err) {
       console.log(chalk.red(`${ERROR} ${err}`));
-      res.status(500).send(err);
+      res.status(500).send({
+        message: "Internal error while logging in user",
+        detail: err,
+      });
     }
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
-    res.status(500).send(err);
+    res.status(500).send({
+      message: "Internal error while logging in user",
+      detail: err,
+    });
   }
 }
