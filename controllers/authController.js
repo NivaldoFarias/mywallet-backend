@@ -69,7 +69,7 @@ export async function signin(req, res) {
   const password = req.body.password;
 
   try {
-    const user = await database.collection("accounts").findOne({ email });
+    const user = await db.collection("accounts").findOne({ email });
     if (!user) {
       console.log(
         chalk.red(`${ERROR} user ${chalk.bold(email)} does not exist`)
@@ -80,28 +80,20 @@ export async function signin(req, res) {
       console.log(
         chalk.red(`${ERROR} password for user ${chalk.bold(email)} is invalid`)
       );
-      return res.status(401).send(`password for user ${email} is invalid`);
+      return res.status(403).send(`password for user ${email} is invalid`);
     }
 
     try {
       const token = uuid();
 
-      await database.collection("accounts").updateOne(
-        { email: email },
-        {
-          $set: {
-            status: {
-              active: true,
-              token: token,
-              last_login: new Date(),
-            },
-          },
-        }
-      );
+      await db.collection("sessions").insertOne({
+        userId: user._id,
+        active: false,
+        token: token,
+        last_login: null,
+      });
       console.log(chalk.blue(`${DB_INFO} user ${chalk.bold(email)} logged in`));
       res.send({
-        name: user.name,
-        email: user.email,
         token: token,
       });
     } catch (err) {
