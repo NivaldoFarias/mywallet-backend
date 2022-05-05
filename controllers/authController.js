@@ -3,9 +3,9 @@ import chalk from "chalk";
 import { v4 as uuid } from "uuid";
 import { stripHtml } from "string-strip-html";
 
+import { ERROR, DB_INFO } from "./../blueprints/chalk.js";
 import { userSchema } from "./../models/user.js";
-import { ERROR, DB_INFO } from "./../app.js";
-import { database } from "./../server/mongoClient.js";
+import { db } from "./../server/mongoClient.js";
 
 export async function signup(req, res) {
   const name = stripHtml(req.body.name).result.trim();
@@ -26,7 +26,7 @@ export async function signup(req, res) {
       return;
     }
 
-    const userExists = await database
+    const userExists = await db
       .collection("accounts")
       .findOne({ email: email });
     if (userExists) {
@@ -38,7 +38,7 @@ export async function signup(req, res) {
     }
 
     try {
-      await database.collection("accounts").insertOne({
+      await db.collection("accounts").insertOne({
         name: name,
         email: email,
         password: password,

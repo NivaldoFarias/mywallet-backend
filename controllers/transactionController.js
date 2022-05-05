@@ -4,8 +4,8 @@ import { ERROR } from "./../blueprints/chalk.js";
 
 export async function getAll(_req, res) {
   try {
-    const users = await db.collection("accounts").find().toArray();
-    res.send(users);
+    const transactions = await db.collection("transactions").find().toArray();
+    res.send(transactions);
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
     res.status(500).send(err);
