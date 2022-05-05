@@ -2,7 +2,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/NivaldoFarias/mywallet-project-back">
+  <a href="https://github.com/NivaldoFarias/mywallet-backend">
     <img src="https://github.com/NivaldoFarias/mywallet-project-front/blob/main/src/assets/mywallet-logo.png" alt="Logo" width="130">
   </a>
 
@@ -11,7 +11,7 @@
   <p align="center">
     Backend Development Project 
     <br />
-    <a href="https://github.com/NivaldoFarias/mywallet-project-back/tree/main/src"><strong>Browse JS code»</strong></a>
+    <a href="https://github.com/NivaldoFarias/mywallet-backend/tree/main/app.js"><strong>Browse JS code»</strong></a>
 </div>
 
 <!-- ![Banner](https://github.com/NivaldoFarias/projeto10-trackit/blob/main/src/assets/images/trackit-showroom.png) -->
