@@ -9,8 +9,8 @@ import * as transaction from "./../controllers/transactionController.js";
 const transactionRouter = express.Router();
 transactionRouter.get(
   process.env.GET_TRANSACTIONS,
-  validateToken,
   requireToken,
+  validateToken,
   transaction.getAll
 );
 export default transactionRouter;
