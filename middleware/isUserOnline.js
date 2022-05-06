@@ -1,17 +1,15 @@
 import chalk from "chalk";
-
-import { stripHtml } from "string-strip-html";
 import { ERROR } from "../models/blueprint/chalk.js";
 import { db } from "./../server/mongoClient.js";
 
 export default async function isUserOnline(req, res, next) {
-  const email = stripHtml(req.body.email).result.trim();
+  const email = res.locals.email;
 
   try {
     const isUserOnline = await db.collection("sessions").findOne({
       email: email,
     });
-    if (isUserOnline.active) {
+    if (isUserOnline?.active) {
       console.log(
         chalk.red(`${ERROR} user ${chalk.bold(email)} is already logged in`)
       );

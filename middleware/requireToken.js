@@ -7,16 +7,18 @@ export default async function requireToken(req, res, next) {
   const token = req.header("Authorization").slice(7);
 
   try {
-    const userHasToken = await db.collection("sessions").findOne({
+    const tokenUser = await db.collection("sessions").findOne({
       token: token,
     });
-    if (!userHasToken) {
+    if (!tokenUser) {
       console.log(chalk.red(`${ERROR} user is not logged in`));
       return res.status(404).send({
         message: "user is not logged in",
         detail: "Ensure that user is logged in",
       });
     }
+    res.locals.token = token;
+    res.locals.user = tokenUser;
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
     return res.status(500).send({

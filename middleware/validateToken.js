@@ -3,8 +3,8 @@ import chalk from "chalk";
 import { tokenSchema } from "./../models/token.js";
 import { ERROR } from "../models/blueprint/chalk.js";
 
-export default async function (req, res, next) {
-  const token = req.header("Authorization").slice(7);
+export default async function (_req, res, next) {
+  const token = res.locals.token;
 
   const validate = tokenSchema.validate(
     { token: token },

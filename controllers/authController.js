@@ -38,7 +38,8 @@ export async function signup(req, res) {
 }
 
 export async function signin(req, res) {
-  const email = stripHtml(req.body.email).result.trim();
+  const email = res.locals.email;
+  const user = res.locals.user;
 
   try {
     const token = uuid();

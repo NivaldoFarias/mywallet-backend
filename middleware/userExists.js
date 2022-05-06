@@ -1,6 +1,6 @@
 import chalk from "chalk";
-
 import { stripHtml } from "string-strip-html";
+
 import { ERROR } from "../models/blueprint/chalk.js";
 import { db } from "./../server/mongoClient.js";
 
@@ -18,6 +18,9 @@ export default async function userExists(req, res, next) {
         detail: `Ensure that ${email} is registered`,
       });
     }
+
+    res.locals.user = user;
+    res.locals.email = email;
   } catch (err) {
     console.log(chalk.bold.red(err));
     res.status(500).send({
