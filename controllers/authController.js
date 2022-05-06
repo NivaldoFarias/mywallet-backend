@@ -44,7 +44,7 @@ export async function signin(req, res) {
   try {
     const token = uuid();
     await db.collection("sessions").insertOne({
-      userId: user._id,
+      email: user.email,
       active: false,
       token: token,
       last_login: null,

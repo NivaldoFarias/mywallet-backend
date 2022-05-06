@@ -21,8 +21,7 @@ export async function getAll(_req, res) {
     );
     const transactions = await db
       .collection("transactions")
-      .find({ email: user.email })
-      .toArray();
+      .findOne({ email: user.email });
     res.send(transactions.user_transactions);
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
