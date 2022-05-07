@@ -12,9 +12,9 @@ import * as transaction from "./../controllers/transactionController.js";
 const transactionRouter = express.Router();
 transactionRouter.use(requireToken);
 transactionRouter.get(
-  process.env.GET_TRANSACTIONS,
+  process.env.USER_TRANSACTIONS,
   validateToken,
-  transaction.getAll
+  transaction.userTransactions
 );
 transactionRouter.post(
   process.env.NEW_TRANSACTION,

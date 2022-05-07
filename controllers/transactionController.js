@@ -3,7 +3,7 @@ import chalk from "chalk";
 import { db } from "./../server/mongoClient.js";
 import { ERROR } from "./../models/blueprint/chalk.js";
 
-export async function getAll(_req, res) {
+export async function userTransactions(_req, res) {
   const token = res.locals.token;
   const user = res.locals.user;
 
@@ -19,15 +19,11 @@ export async function getAll(_req, res) {
         },
       }
     );
+
     const transactions = await db
-      .collection("transactions")
-      .find({ email: user.email })
-      .toArray();
-    /* const transactions = await db
-      .collection("transactions")
-      .find({ $or: [{ from: user.email }, { to: user.email }] })
-      .toArray(); */
-    res.send(transactions);
+      .collection("accounts")
+      .findOne({ email: user.email });
+    res.send(transactions.user_transactions);
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
     return res.status(500).send({
