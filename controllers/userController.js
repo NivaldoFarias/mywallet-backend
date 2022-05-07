@@ -14,3 +14,20 @@ export async function getAll(_req, res) {
     });
   }
 }
+
+export async function getBalance(_req, res) {
+  const user = res.locals.user;
+
+  try {
+    const queryUser = await db
+      .collection("accounts")
+      .findOne({ email: user.email });
+    res.send({ balance: queryUser.balance });
+  } catch (err) {
+    console.log(chalk.red(`${ERROR} ${err}`));
+    return res.status(500).send({
+      message: "Internal error while getting balance",
+      detail: err,
+    });
+  }
+}

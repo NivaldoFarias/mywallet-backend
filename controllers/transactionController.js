@@ -2,7 +2,6 @@ import chalk from "chalk";
 
 import { db } from "./../server/mongoClient.js";
 import { ERROR } from "./../models/blueprint/chalk.js";
-import { transactionSchema } from "./../models/transaction.js";
 
 export async function getAll(_req, res) {
   const token = res.locals.token;
@@ -38,25 +37,9 @@ export async function getAll(_req, res) {
   }
 }
 
-export async function newTransaction(req, res) {
+export async function newTransaction(_req, res) {
   const email = res.locals.user.email;
-  const { amount, description, type } = req.body;
-
-  const validate = transactionSchema.validate(
-    { type, description, amount },
-    {
-      abortEarly: false,
-    }
-  );
-  if (validate.error) {
-    console.log(
-      chalk.red(`${ERROR} ${validate.error.details.map((e) => e.message)}`)
-    );
-    return res.status(422).send({
-      message: "invalid input",
-      details: validate.error.details.map((e) => e.message),
-    });
-  }
+  const { amount, description, type } = res.locals;
 
   const newTransaction = {
     email,
