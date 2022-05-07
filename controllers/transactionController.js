@@ -80,5 +80,3 @@ export async function newTransaction(_req, res) {
     });
   }
 }
-
-export async function newTransfer(req, res) {}
