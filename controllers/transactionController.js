@@ -1,8 +1,8 @@
 import chalk from "chalk";
-import { ObjectId } from "mongodb";
 
 import { db } from "./../server/mongoClient.js";
-import { ERROR } from "../models/blueprint/chalk.js";
+import { ERROR } from "./../models/blueprint/chalk.js";
+import { transactionSchema } from "./../models/transaction.js";
 
 export async function getAll(_req, res) {
   const token = res.locals.token;
@@ -22,8 +22,13 @@ export async function getAll(_req, res) {
     );
     const transactions = await db
       .collection("transactions")
-      .findOne({ email: email });
-    res.send(transactions.user_transactions);
+      .find({ email: user.email })
+      .toArray();
+    /* const transactions = await db
+      .collection("transactions")
+      .find({ $or: [{ from: user.email }, { to: user.email }] })
+      .toArray(); */
+    res.send(transactions);
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
     return res.status(500).send({
@@ -34,107 +39,56 @@ export async function getAll(_req, res) {
 }
 
 export async function newTransaction(req, res) {
-  const targetEmail = req.params.targetEmail;
-  const transferType = req.params.transferType;
   const email = res.locals.user.email;
   const { amount, description, type } = req.body;
-  const regexType = /(transfer|income|expense)/g;
-  const regexTransfer = /(transfer|income|expense)/g;
 
-  if (!type.match(regexType) || !amount || !description) {
-    return res.status(400).send({
-      message: "Missing parameterst",
-      detail: "Ensure that all parameters are present",
+  const validate = transactionSchema.validate(
+    { type, description, amount },
+    {
+      abortEarly: false,
+    }
+  );
+  if (validate.error) {
+    console.log(
+      chalk.red(`${ERROR} ${validate.error.details.map((e) => e.message)}`)
+    );
+    return res.status(422).send({
+      message: "invalid input",
+      details: validate.error.details.map((e) => e.message),
     });
   }
 
   const newTransaction = {
-    description: description,
-    amount: amount,
+    email,
+    type,
+    description,
+    amount,
     date: new Date(),
-    transaction_id: new ObjectId(),
   };
 
   try {
-    const transactions = await db
-      .collection("transactions")
-      .findOne({ email: email });
+    await db.collection("transactions").insertOne(newTransaction);
 
-    if (type === "transfer") {
-      if (!transferType.match(regexTransfer)) {
-        return res.status(400).send({
-          message: "Invalid transfer type",
-          detail: "Ensure that the transfer type is valid",
-        });
-      }
+    let operationValue = null;
+    if (type === "withdrawal") operationValue = -amount;
+    else operationValue = amount;
 
-      if (targetEmail === email) {
-        return res.status(403).send({
-          message: "You cannot transfer to yourself",
-          detail:
-            "Ensure that the target account is different than the source account",
-        });
-      }
-
-      const targetUser = await db
-        .collection("users")
-        .findOne({ email: targetEmail });
-      if (!targetUser) {
-        return res.status(404).send({
-          message: "User not found",
-          detail: "Ensure that the user exists",
-        });
-      }
-
-      await db.collection("transactions").updateOne(
-        {
-          email: targetEmail,
-        },
-        {
-          $inc: {
-            transactions_count: 1,
-            balance: amount,
-          },
-          $set: {
-            user_transactions: {
-              transfer: [
-                ...targetUser.user_transactions.transfer,
-                {
-                  ...newTransaction,
-                  type: "entry",
-                  action_email: email,
-                },
-              ],
-            },
-          },
-        }
-      );
-
-      transactions.user_transactions.transfer.push({
-        ...newTransaction,
-        type: "send",
-        action_email: targetEmail,
-      });
-    } else {
-      transactions.user_transactions[type].push(newTransaction);
-    }
-
-    await db.collection("transactions").updateOne(
+    await db.collection("accounts").updateOne(
       {
         email: email,
       },
       {
         $inc: {
           transactions_count: 1,
-          balance: amount,
+          balance: operationValue,
         },
-        $set: {
-          user_transactions: transactions.user_transactions,
+        $push: {
+          user_transactions: newTransaction,
         },
       }
     );
 
-    res.send(transactions.user_transactions);
+    res.sendStatus(200);
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
     return res.status(500).send({
@@ -143,3 +97,5 @@ export async function newTransaction(req, res) {
     });
   }
 }
+
+export async function newTransfer(req, res) {}
