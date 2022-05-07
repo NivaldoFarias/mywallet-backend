@@ -20,10 +20,10 @@ export async function userTransactions(_req, res) {
       }
     );
 
-    const transactions = await db
+    const queryUser = await db
       .collection("accounts")
       .findOne({ email: user.email });
-    res.send(transactions.user_transactions);
+    res.send(queryUser.user_transactions);
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
     return res.status(500).send({

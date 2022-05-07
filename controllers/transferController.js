@@ -3,6 +3,27 @@ import chalk from "chalk";
 import { db } from "./../server/mongoClient.js";
 import { SUCCESS, ERROR } from "./../models/blueprint/chalk.js";
 
+export async function userTransfers(_req, res) {
+  const user = res.locals.user;
+
+  try {
+    const queryUser = await db
+      .collection("accounts")
+      .findOne({ email: user.email });
+    const transfers = queryUser.user_transactions.filter((transaction) => {
+      return transaction.to;
+    });
+
+    res.send(transfers);
+  } catch (err) {
+    console.log(chalk.red(`${ERROR} ${err}`));
+    return res.status(500).send({
+      message: "Internal error while getting transactions",
+      detail: err,
+    });
+  }
+}
+
 export async function newTransfer(_req, res) {
   const from = res.locals.user.email;
   const { to, description, amount } = res.locals;

@@ -9,6 +9,7 @@ import targetAccountExists from "./../middleware/targetAccountExists.js";
 import * as transfer from "./../controllers/transferController.js";
 
 const transferRouter = express.Router();
+transferRouter.get(process.env.USER_TRANSFERS, transfer.userTransfers);
 transferRouter.post(
   process.env.NEW_TRANSFER,
   validateTransfer,
