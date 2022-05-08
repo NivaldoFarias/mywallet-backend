@@ -4,7 +4,7 @@ import { db } from "./../server/mongoClient.js";
 import { ERROR } from "./../models/blueprint/chalk.js";
 
 export default async function requireToken(req, res, next) {
-  const token = req.header("Authorization").slice(7);
+  const token = req.header("Authorization")?.slice(7);
 
   try {
     const tokenUser = await db.collection("sessions").findOne({
