@@ -8,4 +8,5 @@ dotenv.config();
 const userRouter = express.Router();
 userRouter.get(process.env.GET_USERS, requireToken, user.getAll);
 userRouter.get(process.env.GET_BALANCE, requireToken, user.getBalance);
+userRouter.post(process.env.SIGNOFF, requireToken, user.signoff);
 export default userRouter;

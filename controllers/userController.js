@@ -38,3 +38,18 @@ export async function getBalance(_req, res) {
     });
   }
 }
+
+export async function signoff(_req, res) {
+  const email = res.locals.user.email;
+
+  try {
+    await db.collection("sessions").deleteOne({ email: email });
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(chalk.red(`${ERROR} ${err}`));
+    return res.status(500).send({
+      message: "Internal error while signing off user",
+      detail: err,
+    });
+  }
+}
