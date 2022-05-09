@@ -17,6 +17,7 @@ transferRouter.post(
   targetAccountExists,
   transfer.newTransfer
 );
+transferRouter.delete(process.env.DELETE_TRANSFER, transfer.deleteTransfer);
 transferRouter.put(
   process.env.UPDATE_TRANSFER,
   validateTransfer,

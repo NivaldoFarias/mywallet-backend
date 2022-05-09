@@ -81,8 +81,8 @@ export async function newTransaction(_req, res) {
 
 export async function deleteTransaction(req, res) {
   const id = req.params.transaction_id;
-  const email = res.locals.user.email;
   let operationValue = null;
+  let email = null;
 
   try {
     const transaction = await db
@@ -100,6 +100,7 @@ export async function deleteTransaction(req, res) {
       if (transaction.type === "withdrawal")
         operationValue = transaction.amount;
       else operationValue = -transaction.amount;
+      email = transaction.email;
     }
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
@@ -144,14 +145,7 @@ export async function updateTransaction(req, res) {
   const { amount, description, type } = res.locals;
   let operationValue = null;
   let diffValue = null;
-
-  const newTransaction = {
-    email,
-    type,
-    description,
-    amount,
-    date: new Date(),
-  };
+  let newTransaction = null;
 
   try {
     const transaction = await db
@@ -169,6 +163,14 @@ export async function updateTransaction(req, res) {
       if (type === "withdrawal") operationValue = amount;
       else operationValue = -amount;
 
+      newTransaction = {
+        _id: transaction._id,
+        email,
+        type,
+        description,
+        amount,
+        date: new Date(),
+      };
       diffValue = operationValue - transaction.amount;
     }
   } catch (err) {

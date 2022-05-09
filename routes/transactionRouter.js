@@ -28,6 +28,8 @@ transactionRouter.delete(
 );
 transactionRouter.put(
   process.env.UPDATE_TRANSACTION,
+  validateTransaction,
+  hasEnoughBalance,
   transaction.updateTransaction
 );
 

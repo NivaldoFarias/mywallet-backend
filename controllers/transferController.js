@@ -95,19 +95,67 @@ export async function newTransfer(_req, res) {
   }
 }
 
+export async function deleteTransfer(req, res) {
+  const id = req.params.transfer_id;
+  let email = null;
+  let transfer = null;
+
+  try {
+    transfer = await db
+      .collection("transfers")
+      .findOne({ _id: new ObjectId(id) });
+    if (!transfer) {
+      console.log(
+        chalk.red(`${ERROR} Transfer ${chalk.bold(id)} does not exist`)
+      );
+      return res.status(404).send({
+        message: "Transfer does not exist",
+        detail: `Transfer ${id} does not exist`,
+      });
+    } else email = transfer.from;
+  } catch (err) {
+    console.log(chalk.red(`${ERROR} ${err}`));
+    return res.status(500).send({
+      message: "Internal error while deleting transaction",
+      detail: err,
+    });
+  }
+
+  try {
+    await db.collection("transfers").deleteOne({ _id: new ObjectId(id) });
+    await db.collection("accounts").updateOne(
+      {
+        email: email,
+      },
+      {
+        $inc: {
+          transactions_count: -1,
+          balance: transfer.amount,
+        },
+        $pull: {
+          user_transactions: {
+            _id: new ObjectId(id),
+          },
+        },
+      }
+    );
+    console.log(chalk.green(`${SUCCESS} Transfer deleted`));
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(chalk.red(`${ERROR} ${err}`));
+    return res.status(500).send({
+      message: "Internal error while deleting transfer",
+      detail: err,
+    });
+  }
+}
+
 export async function updateTransfer(req, res) {
   const id = req.params.transfer_id;
   const from = res.locals.user.email;
   const { to, description, amount } = res.locals;
   let diffValue = null;
-
-  const newTransfer = {
-    from,
-    to,
-    description,
-    amount,
-    date: new Date(),
-  };
+  let newTransfer = null;
 
   if (to === from) {
     return res.status(400).send({
@@ -133,6 +181,14 @@ export async function updateTransfer(req, res) {
         detail: `Ensure that the transfer you want modified was sent by you`,
       });
     } else {
+      newTransfer = {
+        _id: transfer._id,
+        from,
+        to,
+        description,
+        amount,
+        date: new Date(),
+      };
       diffValue = transfer.amount - amount;
     }
   } catch (err) {
@@ -156,7 +212,7 @@ export async function updateTransfer(req, res) {
     try {
       await db.collection("accounts").updateOne(
         {
-          from: from,
+          email: from,
         },
         {
           $inc: {
@@ -171,7 +227,7 @@ export async function updateTransfer(req, res) {
       );
       await db.collection("accounts").updateOne(
         {
-          from: from,
+          email: from,
         },
         {
           $push: {
