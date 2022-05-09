@@ -22,5 +22,13 @@ transactionRouter.post(
   hasEnoughBalance,
   transaction.newTransaction
 );
+transactionRouter.delete(
+  process.env.DELETE_TRANSACTION,
+  transaction.deleteTransaction
+);
+transactionRouter.put(
+  process.env.UPDATE_TRANSACTION,
+  transaction.updateTransaction
+);
 
 export default transactionRouter;
