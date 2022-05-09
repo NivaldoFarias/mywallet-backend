@@ -2,7 +2,7 @@ import chalk from "chalk";
 import { ERROR } from "../models/blueprint/chalk.js";
 import { db } from "./../server/mongoClient.js";
 
-export default async function isUserOnline(req, res, next) {
+export default async function isUserOnline(_req, res, next) {
   const email = res.locals.email;
 
   try {

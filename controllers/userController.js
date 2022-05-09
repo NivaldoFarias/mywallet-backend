@@ -42,6 +42,16 @@ export async function getBalance(_req, res) {
 export async function signoff(_req, res) {
   const email = res.locals.user.email;
 
+  const isUserOnline = await db
+    .collection("sessions")
+    .findOne({ email: email });
+  if (!isUserOnline) {
+    return res.status(401).send({
+      message: "User is not logged in",
+      detail: "Ensure that the corresponding token is valid",
+    });
+  }
+
   try {
     await db.collection("sessions").deleteOne({ email: email });
     res.sendStatus(200);
