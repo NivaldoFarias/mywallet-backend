@@ -167,7 +167,9 @@ export async function updateTransaction(req, res) {
         amount,
         date: new Date(),
       };
-      diffValue = transaction.amount - amount;
+      if (transaction.type === "withdrawal")
+        diffValue = transaction.amount - amount;
+      else diffValue = amount - transaction.amount;
     }
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
