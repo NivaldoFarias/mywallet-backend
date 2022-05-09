@@ -5,7 +5,14 @@ import { ERROR } from "../models/blueprint/chalk.js";
 export async function getAll(_req, res) {
   try {
     const users = await db.collection("accounts").find().toArray();
-    res.send(users);
+    res.send(
+      users.map((user) => {
+        return {
+          name: user.name,
+          email: user.email,
+        };
+      })
+    );
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
     res.status(500).send({

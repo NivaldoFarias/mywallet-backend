@@ -16,15 +16,10 @@ export async function signup(req, res) {
       name: name,
       email: email,
       password: password,
-      balance: {
-        $numberDecimal: "0.0",
-      },
+      balance: 0,
       singup_date: new Date(),
-      status: {
-        active: false,
-        token: "",
-        last_login: new Date(),
-      },
+      transactions_count: 0,
+      user_transactions: [],
     });
     console.log(chalk.blue(`${DB_INFO} user ${chalk.bold(email)} created`));
     res.sendStatus(201);
@@ -37,7 +32,7 @@ export async function signup(req, res) {
   }
 }
 
-export async function signin(req, res) {
+export async function signin(_req, res) {
   const email = res.locals.email;
   const user = res.locals.user;
 
@@ -51,6 +46,8 @@ export async function signin(req, res) {
     });
     console.log(chalk.blue(`${DB_INFO} user ${chalk.bold(email)} logged in`));
     res.send({
+      name: user.name,
+      email: user.email,
       token: token,
     });
   } catch (err) {
