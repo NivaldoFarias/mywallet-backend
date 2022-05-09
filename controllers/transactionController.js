@@ -82,6 +82,7 @@ export async function newTransaction(_req, res) {
 export async function deleteTransaction(req, res) {
   const id = req.params.transaction_id;
   const email = res.locals.user.email;
+  let operationValue = null;
 
   try {
     const transaction = await db
@@ -95,6 +96,10 @@ export async function deleteTransaction(req, res) {
         message: "Transaction does not exist",
         detail: `Transaction ${id} does not exist`,
       });
+    } else {
+      if (transaction.type === "withdrawal")
+        operationValue = transaction.amount;
+      else operationValue = -transaction.amount;
     }
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
@@ -113,6 +118,7 @@ export async function deleteTransaction(req, res) {
       {
         $inc: {
           transactions_count: -1,
+          balance: operationValue,
         },
         $pull: {
           user_transactions: {
@@ -148,7 +154,7 @@ export async function updateTransaction(req, res) {
   try {
     const transaction = await db
       .collection("transactions")
-      .findOne({ _id: new ObjectId(id) });
+      .findOne({ _id: id });
     if (!transaction) {
       console.log(
         chalk.red(`${ERROR} Transaction ${chalk.bold(id)} does not exist`)
@@ -169,7 +175,7 @@ export async function updateTransaction(req, res) {
   try {
     await db.collection("transactions").updateOne(
       {
-        _id: new ObjectId(id),
+        _id: id,
       },
       {
         $set: newTransaction,
@@ -184,7 +190,7 @@ export async function updateTransaction(req, res) {
         {
           $pull: {
             user_transactions: {
-              _id: new ObjectId(id),
+              _id: id,
             },
           },
         }
