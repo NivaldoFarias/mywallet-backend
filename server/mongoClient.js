@@ -6,7 +6,7 @@ dotenv.config();
 export let db = null;
 const DB_INFO = chalk.bold.blue("[Database]");
 const ERROR = chalk.bold.red("[ERROR]");
-const mongoClient = new MongoClient(process.env.MONGODB_URI, {
+const mongoClient = new MongoClient(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
