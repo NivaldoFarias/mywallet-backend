@@ -143,7 +143,6 @@ export async function updateTransaction(req, res) {
   const id = req.params.transaction_id;
   const email = res.locals.user.email;
   const { amount, description, type } = res.locals;
-  let operationValue = null;
   let diffValue = null;
   let newTransaction = null;
 
@@ -160,9 +159,6 @@ export async function updateTransaction(req, res) {
         detail: `Transaction ${id} does not exist`,
       });
     } else {
-      if (type === "withdrawal") operationValue = amount;
-      else operationValue = -amount;
-
       newTransaction = {
         _id: transaction._id,
         email,
@@ -171,7 +167,7 @@ export async function updateTransaction(req, res) {
         amount,
         date: new Date(),
       };
-      diffValue = operationValue - transaction.amount;
+      diffValue = transaction.amount - amount;
     }
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
