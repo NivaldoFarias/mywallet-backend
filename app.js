@@ -7,7 +7,7 @@ import router from "./routes/index.js";
 import { SERVER_INFO } from "./models/blueprint/chalk.js";
 
 dotenv.config();
-const app = express().use(json()).use(cors()).use(router);
+const app = express().use(cors()).use(json()).use(router);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
