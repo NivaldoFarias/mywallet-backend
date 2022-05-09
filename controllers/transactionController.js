@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { ObjectId } from "mongodb";
 
 import { db } from "./../server/mongoClient.js";
 import { SUCCESS, ERROR } from "./../models/blueprint/chalk.js";
@@ -79,11 +80,32 @@ export async function newTransaction(_req, res) {
 }
 
 export async function deleteTransaction(req, res) {
-  const id = req.body.transaction_id;
+  const id = req.params.transaction_id;
   const email = res.locals.user.email;
 
   try {
-    await db.collection("transactions").deleteOne({ _id: id });
+    const transaction = await db
+      .collection("transactions")
+      .findOne({ _id: new ObjectId(id) });
+    if (!transaction) {
+      console.log(
+        chalk.red(`${ERROR} Transaction ${chalk.bold(id)} does not exist`)
+      );
+      return res.status(404).send({
+        message: "Transaction does not exist",
+        detail: `Transaction ${id} does not exist`,
+      });
+    }
+  } catch (err) {
+    console.log(chalk.red(`${ERROR} ${err}`));
+    return res.status(500).send({
+      message: "Internal error while deleting message",
+      detail: err,
+    });
+  }
+
+  try {
+    await db.collection("transactions").deleteOne({ _id: new ObjectId(id) });
     await db.collection("accounts").updateOne(
       {
         email: email,
@@ -94,7 +116,7 @@ export async function deleteTransaction(req, res) {
         },
         $pull: {
           user_transactions: {
-            _id: id,
+            _id: new ObjectId(id),
           },
         },
       }
@@ -111,7 +133,7 @@ export async function deleteTransaction(req, res) {
 }
 
 export async function updateTransaction(req, res) {
-  const id = req.body.transaction_id;
+  const id = req.params.transaction_id;
   const email = res.locals.user.email;
   const { amount, description, type } = res.locals;
 
@@ -124,9 +146,30 @@ export async function updateTransaction(req, res) {
   };
 
   try {
+    const transaction = await db
+      .collection("transactions")
+      .findOne({ _id: new ObjectId(id) });
+    if (!transaction) {
+      console.log(
+        chalk.red(`${ERROR} Transaction ${chalk.bold(id)} does not exist`)
+      );
+      return res.status(404).send({
+        message: "Transaction does not exist",
+        detail: `Transaction ${id} does not exist`,
+      });
+    }
+  } catch (err) {
+    console.log(chalk.red(`${ERROR} ${err}`));
+    return res.status(500).send({
+      message: "Internal error while deleting message",
+      detail: err,
+    });
+  }
+
+  try {
     await db.collection("transactions").updateOne(
       {
-        _id: id,
+        _id: new ObjectId(id),
       },
       {
         $set: newTransaction,
@@ -141,7 +184,7 @@ export async function updateTransaction(req, res) {
         {
           $pull: {
             user_transactions: {
-              _id: id,
+              _id: new ObjectId(id),
             },
           },
         }
