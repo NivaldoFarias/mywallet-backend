@@ -17,5 +17,12 @@ transferRouter.post(
   targetAccountExists,
   transfer.newTransfer
 );
+transferRouter.put(
+  process.env.UPDATE_TRANSFER,
+  validateTransfer,
+  hasEnoughBalance,
+  targetAccountExists,
+  transfer.updateTransfer
+);
 
 export default transferRouter;

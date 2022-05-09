@@ -104,7 +104,7 @@ export async function deleteTransaction(req, res) {
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
     return res.status(500).send({
-      message: "Internal error while deleting message",
+      message: "Internal error while deleting transaction",
       detail: err,
     });
   }
@@ -174,7 +174,7 @@ export async function updateTransaction(req, res) {
   } catch (err) {
     console.log(chalk.red(`${ERROR} ${err}`));
     return res.status(500).send({
-      message: "Internal error while deleting message",
+      message: "Internal error while updating transaction",
       detail: err,
     });
   }
