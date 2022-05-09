@@ -36,6 +36,12 @@ export async function newTransfer(_req, res) {
     date: new Date(),
   };
 
+  if (to === from) {
+    return res.status(400).send({
+      message: "You can't transfer to yourself",
+    });
+  }
+
   try {
     await db.collection("transfers").insertOne(newTransfer);
     console.log(chalk.green(`${SUCCESS} Transfer created`));

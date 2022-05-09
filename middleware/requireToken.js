@@ -11,10 +11,10 @@ export default async function requireToken(req, res, next) {
       token: token,
     });
     if (!tokenUser) {
-      console.log(chalk.red(`${ERROR} user is not logged in`));
+      console.log(chalk.red(`${ERROR} Invalid token`));
       return res.status(404).send({
-        message: "user is not logged in",
-        detail: "Ensure that user is logged in",
+        message: "Invalid token",
+        detail: "Ensure that you have a valid token",
       });
     }
     res.locals.token = token;
