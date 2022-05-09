@@ -127,6 +127,11 @@ export async function updateTransfer(req, res) {
         message: "Transfer does not exist",
         detail: `Transfer ${id} does not exist`,
       });
+    } else if (transfer.to === from) {
+      return res.status(403).send({
+        message: "You can't modify a transfer that was sent to you",
+        detail: `Ensure that the transfer you want modified was sent by you`,
+      });
     } else {
       diffValue = transfer.amount - amount;
     }
