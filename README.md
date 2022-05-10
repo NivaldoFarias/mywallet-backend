@@ -9,12 +9,12 @@
 <h3 align="center">MyWallet Project | Backend</h3>
   <h6 align="center">WIP</h6>
   <p align="center">
-    Backend Development Project 
+    Full Stack Development Project
     <br />
     <a href="https://github.com/NivaldoFarias/mywallet-backend/tree/main/app.js"><strong>Browse JS code»</strong></a>
 </div>
 
-<!-- ![Banner](https://github.com/NivaldoFarias/projeto10-trackit/blob/main/src/assets/images/trackit-showroom.png) -->
+![Banner](https://github.com/NivaldoFarias/mywallet-frontend/blob/main/src/assets/mywalllet-showroom.png?raw=true)
 
 <!-- ABOUT THE PROJECT -->
 
