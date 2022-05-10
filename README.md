@@ -6,12 +6,14 @@
     <img src="https://github.com/NivaldoFarias/mywallet-project-front/blob/main/src/assets/mywallet-logo.png" alt="Logo" width="130">
   </a>
 
-<h3 align="center">MyWallet Project | Backend</h3>
+<h3 align="center">MyWallet Project | Back-end</h3>
   <h6 align="center">WIP</h6>
   <p align="center">
     Full Stack Development Project
     <br />
     <a href="https://github.com/NivaldoFarias/mywallet-backend/tree/main/app.js"><strong>Browse JS code»</strong></a>
+    -
+    <a href="https://github.com/NivaldoFarias/mywallet-frontend/tree/main/src/"><strong>Browse Front-end»</strong></a>
 </div>
 
 ![Banner](https://github.com/NivaldoFarias/mywallet-frontend/blob/main/src/assets/mywalllet-showroom.png?raw=true)
