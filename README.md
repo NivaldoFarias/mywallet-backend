@@ -13,7 +13,7 @@
     <br />
     <a href="https://github.com/NivaldoFarias/mywallet-backend/tree/main/app.js"><strong>Browse JS code»</strong></a>
     -
-    <a href="https://github.com/NivaldoFarias/mywallet-frontend/tree/main/src/"><strong>Browse Front-end»</strong></a>
+    <a href="https://github.com/NivaldoFarias/mywallet-frontend#readme"><strong>Browse Front-end»</strong></a>
 </div>
 
 ![Banner](https://github.com/NivaldoFarias/mywallet-frontend/blob/main/src/assets/mywalllet-showroom.png?raw=true)
